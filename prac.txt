@@ -1,0 +1,375 @@
+/*
+ * GLUT Shapes Demo
+ *
+ * Written by Nigel Stewart November 2003
+ *
+ * This program is test harness for the sphere, cone
+ * and torus shapes in GLUT.
+ *
+ * Spinning wireframe and smooth shaded shapes are
+ * displayed until the ESC or q key is pressed.  The
+ * number of geometry stacks and slices can be adjusted
+ * using the + and - keys.
+ */
+
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#include <stdlib.h>
+
+#include <math.h>
+
+
+GLfloat degree=0.0, degree1=0, degree2=0,tx=0,ty=0,tz=-10,scale=2;
+static int slices = 16;
+static int stacks = 16;
+
+/* GLUT callback Handlers */
+const float DEG2RAD = 3.14159/180;
+static void resize(int width, int height)
+{
+    const float ar = (float) width / (float) height;
+
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-ar, ar, -1.0, 1.0, 2.0, 100.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity() ;
+}
+static GLfloat pyramid[5][3]={{-1,-1,1},
+                            {1,-1,1},
+                            {1,-1,-1},
+                            {-1,-1,-1},
+                            {0,1,0}
+
+};
+static GLubyte p_indices[4][3]={{0,1,4},
+                            {1,2,4},
+                            {2,3,4},
+                            {3,0,4}
+};
+static GLubyte quadIndices[1][4] ={
+                            {0, 3,2,1}
+
+};
+static GLfloat colors[5][3] = {
+
+{0.0, 0.0, 1.0}, //color for point index 0
+{0.5, 0.0, 1.0}, //color for point index 1
+{0.0, 1.0, 0.0}, //color for point index 2
+{0.0, 1.0, 1.0}, //color for point index 3
+{0.8, 0.0, 0.0} //color for point index 4
+};
+void draw()
+{
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
+        glVertexPointer(3,GL_FLOAT,0,pyramid);
+        glColorPointer(3,GL_FLOAT,0,colors);
+        glDrawElements(GL_TRIANGLES,12,GL_UNSIGNED_BYTE,p_indices);
+        glDrawElements(GL_QUADS,4,GL_UNSIGNED_BYTE,quadIndices);
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_VERTEX_ARRAY);
+
+}
+void ownRotate(GLfloat degree,GLfloat x,GLfloat y, GLfloat z)
+{
+    GLdouble dd=degree*DEG2RAD;
+    GLfloat mx[16],my[16],mz[16];
+    if(x==1)
+    {
+        mx[0]=1;
+        mx[1]=0;
+        mx[2]=0;
+        mx[3]=0;
+        mx[4]=0;
+        mx[5]=cos(dd);
+        mx[6]=sin(dd);
+        mx[7]=0;
+        mx[8]=0;
+        mx[9]=-sin(dd);
+        mx[10]=cos(dd);
+        mx[11]=0;
+        mx[12]=0;
+        mx[13]=0;
+        mx[14]=0;
+        mx[15]=1;
+
+        glMatrixMode(GL_MODELVIEW);
+        glMultMatrixf(mx);
+    }
+    if(y==1)
+    {
+        mx[0]=cos(dd);
+        mx[1]=0;
+        mx[2]=-sin(dd);
+        mx[3]=0;
+        mx[4]=0;
+        mx[5]=1;
+        mx[6]=0;
+        mx[7]=0;
+        mx[8]=sin(dd);
+        mx[9]=0;
+        mx[10]=cos(dd);
+        mx[11]=0;
+        mx[12]=0;
+        mx[13]=0;
+        mx[14]=0;
+        mx[15]=1;
+
+        glMatrixMode(GL_MODELVIEW);
+        glMultMatrixf(mx);
+    }
+    if(z==1)
+    {
+        mx[0]=cos(dd);
+        mx[1]=sin(dd);
+        mx[2]=0;
+        mx[3]=0;
+        mx[4]=-sin(dd);
+        mx[5]=cos(dd);
+        mx[6]=0;
+        mx[7]=0;
+        mx[8]=0;
+        mx[9]=0;
+        mx[10]=1;
+        mx[11]=0;
+        mx[12]=0;
+        mx[13]=0;
+        mx[14]=0;
+        mx[15]=1;
+
+        glMatrixMode(GL_MODELVIEW);
+        glMultMatrixf(mx);
+    }
+
+}
+void ownScale(GLfloat x, GLfloat y,GLfloat z)
+{
+    GLfloat m[16];
+    for(int i=0; i<16; i++)
+    {
+        m[i]=0;
+    }
+    m[0]=x;
+    m[5]=y;
+    m[10]=z;
+    m[15]=1;
+    glMatrixMode(GL_MODELVIEW);
+    glMultMatrixf(m);
+}
+void ownTranslate(GLfloat x, GLfloat y,GLfloat z)
+{
+    GLfloat m[16];
+    for(int i=0; i<16; i++)
+    {
+        m[i]=0;
+    }
+    m[0]=1;
+    m[5]=1;
+    m[10]=1;
+    m[15]=1;
+    m[12]=x;
+    m[13]=y;
+    m[14]=z;
+
+    glMatrixMode(GL_MODELVIEW);
+    glMultMatrixf(m);
+}
+static void display(void)
+{
+    const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
+    const double a = t*90.0;
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //  glColor3d(1,0,0);
+
+//    glPushMatrix();
+//        glTranslated(-2.4,1.2,-6);
+//        glRotated(60,1,0,0);
+//        glRotated(a,0,0,1);
+//        glutSolidSphere(1,slices,stacks);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//        glTranslated(0,1.2,-6);
+//        glRotated(60,1,0,0);
+//        glRotated(a,0,0,1);
+//        glutSolidCone(1,1,slices,stacks);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//        glTranslated(2.4,1.2,-6);
+//        glRotated(60,1,0,0);
+//        glRotated(a,0,0,1);
+//        glutSolidTorus(0.2,0.8,slices,stacks);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//        glTranslated(-2.4,-1.2,-6);
+//        glRotated(60,1,0,0);
+//        glRotated(a,0,0,1);
+//        glutWireSphere(1,slices,stacks);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//        glTranslated(0,-1.2,-6);
+//        glRotated(60,1,0,0);
+//        glRotated(a,0,0,1);
+//        glutWireCone(1,1,slices,stacks);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//        glTranslated(2.4,-1.2,-6);
+//        glRotated(60,1,0,0);
+//        glRotated(a,0,0,1);
+//        glutWireTorus(0.2,0.8,slices,stacks);
+//    glPopMatrix();
+
+    glPushMatrix();
+    //glTranslated(tx,ty,tz);
+    ownTranslate(tx,ty,tz);
+   // glRotated(degree,1,0,0);
+     ownRotate(degree,1,0,0);
+     ownRotate(degree1,0,1,0);
+     ownRotate(degree2,0,0,1);
+   // glRotated(degree1,0,1,0);
+   // glRotated(degree2,0,0,1);
+    //  glScalef(scale,scale,scale);
+    ownScale(scale,scale,scale);
+
+
+    draw();
+    glPopMatrix();
+
+
+    glutSwapBuffers();
+}
+
+
+static void key(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 'j':
+        degree+=2.5;
+        break;
+    case 'k':
+        degree-=2.5;
+        break;
+    case 'l':
+        degree1+=2.5;
+        break;
+    case 'm':
+        degree1-=2.5;
+        break;
+    case 'o':
+        degree2+=2.5;
+        break;
+    case 'p':
+        degree2-=2.5;
+        break;
+    case 'q':
+        scale+=0.5;
+        break;
+    case 'w':
+        scale-=0.5;
+        break;
+    case '1':
+        tx+=1;
+        break;
+    case '2':
+        tx-=1;
+        break;
+    case '3':
+        ty+=1;
+        break;
+    case '4':
+        ty-=1;
+        break;
+    case '5':
+        tz+=1;
+        break;
+    case '6':
+        tz-=1;
+        break;
+
+    case '+':
+        slices++;
+        stacks++;
+        break;
+
+    case '-':
+        if (slices>3 && stacks>3)
+        {
+            slices--;
+            stacks--;
+        }
+        break;
+    }
+
+    glutPostRedisplay();
+}
+
+static void idle(void)
+{
+    glutPostRedisplay();
+}
+
+const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
+const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
+const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
+
+const GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
+const GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
+const GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
+const GLfloat high_shininess[] = { 100.0f };
+
+/* Program entry point */
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv);
+    glutInitWindowSize(1040,680);
+    glutInitWindowPosition(10,10);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+
+    glutCreateWindow("GLUT Shapes");
+
+    glutReshapeFunc(resize);
+    glutDisplayFunc(display);
+    glutKeyboardFunc(key);
+    glutIdleFunc(idle);
+
+    glClearColor(1,1,1,1);
+    // glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    //  glEnable(GL_LIGHT0);
+//    glEnable(GL_NORMALIZE);
+    //  glEnable(GL_COLOR_MATERIAL);
+//    glEnable(GL_LIGHTING);
+//
+//    glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+//    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+//    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+//    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+//
+//    glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
+//    glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
+//    glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
+//    glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+
+    glutMainLoop();
+
+    return EXIT_SUCCESS;
+}

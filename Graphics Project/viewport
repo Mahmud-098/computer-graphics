@@ -1,0 +1,130 @@
+
+glPushMatrix();
+    glViewport(0, 200, xx/2,yy/2 );
+    glPushMatrix();
+    //glViewport(0,0,300,340);
+    glTranslated(l,r,f);
+    glRotated(degree,1,0,0);
+    glRotated(degree1,0,1,0);
+    glRotated(degree2,0,0,1);
+
+    glScalef(sc,sc,sc); /*//glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
+    //glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
+    //glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
+    //glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);*/
+  /*   //glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient2);
+    //glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse2);
+    //glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular2);
+    //glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess2);
+*/
+    glBindTexture(GL_TEXTURE_2D,8);
+	//glEnable(GL_TEXTURE_2D);
+    helicopter(a);
+    glDisable(GL_TEXTURE_2D);
+
+
+
+
+    glPopMatrix();
+
+      glPushMatrix();
+      glTranslated(l,r,f);
+    glRotated(degree,1,0,0);
+    glRotated(degree1,0,1,0);
+    glRotated(degree2,0,0,1);
+
+    glScalef(sc,sc,sc);
+ /*   //glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
+    //glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
+    //glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
+    //glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+*/
+    // glBindTexture(GL_TEXTURE_2D,9);
+	//glEnable(GL_TEXTURE_2D);
+
+    table1();
+   // glDisable(GL_TEXTURE_2D);
+    glPopMatrix();
+
+//jack
+    glPushMatrix();
+//ellipse();
+glTranslated(l,r,f);
+    glRotated(degree,1,0,0);
+    glRotated(degree1,0,1,0);
+    glRotated(degree2,0,0,1);
+
+    glScalef(sc,sc,sc);
+      glBindTexture(GL_TEXTURE_2D,10);
+	//glEnable(GL_TEXTURE_2D);
+    jack_place();
+    glDisable(GL_TEXTURE_2D);
+
+   // jow();
+
+    glPopMatrix();
+
+     glPushMatrix();
+//ellipse();
+glTranslated(l,r,f);
+    glRotated(degree,1,0,0);
+    glRotated(degree1,0,1,0);
+    glRotated(degree2,0,0,1);
+
+    glScalef(sc,sc,sc);
+     //glBindTexture(GL_TEXTURE_2D,6);
+	//glEnable(GL_TEXTURE_2D);
+      house1();
+//glDisable(GL_TEXTURE_2D);
+   // jow();
+
+    glPopMatrix();
+     glPushMatrix();
+//ellipse();
+glTranslated(l,r,f);
+    glRotated(degree,1,0,0);
+    glRotated(degree1,0,1,0);
+    glRotated(degree2,0,0,1);
+
+    glScalef(sc,sc,sc);
+    //glBindTexture(GL_TEXTURE_2D,10);
+	//glEnable(GL_TEXTURE_2D);
+      frame1();
+//glDisable(GL_TEXTURE_2D);
+   // jow();
+
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(l,r,f);
+    glRotated(degree,1,0,0);
+    glRotated(degree1,0,1,0);
+    glRotated(degree2,0,0,1);
+
+    glScalef(sc,sc,sc);
+    outside1();
+    glPopMatrix();
+
+   /* glPushMatrix();
+   // glViewport(320,0,320,340);
+    glTranslated(l,r,f);
+    glRotated(degree,1,0,0);
+    glRotated(degree1,0,1,0);
+    glRotated(degree2,0,0,1);
+
+    glScalef(sc,sc,sc);
+
+     //sphere();
+/*glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
+    //glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
+    //glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
+    //glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+*/
+
+	/*glBindTexture(GL_TEXTURE_2D,5);
+	glEnable(GL_TEXTURE_2D);
+    helicopter(a);
+    glDisable(GL_TEXTURE_2D);
+    glPopMatrix();
+*/
+glPopMatrix();
